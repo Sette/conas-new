@@ -151,19 +151,19 @@ def main():
     train_acc, train_obj = train(train_queue, model, criterion_smooth, optimizer)
     logging.info('train_acc %f', train_acc)
 
-    #valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
-    #logging.info('valid_acc_top1 %f', valid_acc_top1)
-    #logging.info('valid_acc_top5 %f', valid_acc_top5)
+    valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
+    logging.info('valid_acc_top1 %f', valid_acc_top1)
+    logging.info('valid_acc_top5 %f', valid_acc_top5)
 
-    #is_best = False
-    #if valid_acc_top1 > best_acc_top1:
-      #best_acc_top1 = valid_acc_top1
-      #is_best = True
+    is_best = False
+    if valid_acc_top1 > best_acc_top1:
+      best_acc_top1 = valid_acc_top1
+      is_best = True
 
     utils.save_checkpoint({
       'epoch': epoch + 1,
       'state_dict': model.state_dict(),
-      #'best_acc_top1': best_acc_top1,
+      'best_acc_top1': best_acc_top1,
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
 
