@@ -95,7 +95,7 @@ def main():
 
   normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
-  train_data = dset.ImageFolder
+  train_data = dset.ImageFolder(
     traindir,
     transforms.Compose([
       transforms.RandomResizedCrop(224),
@@ -105,9 +105,9 @@ def main():
         contrast=0.4,
         saturation=0.4,
         hue=0.2),
-      transforms.ToTensor(),
-      normalize,
-    ]))
+        transforms.ToTensor(),
+        normalize,
+        ]))
 
   train_data,valid_data =  train_test_split(train_data,test_size=0.33, random_state=42)
 
