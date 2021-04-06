@@ -12,6 +12,7 @@ import torch.utils
 import torch.nn.functional as F
 import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
+from sklearn.model_selection import train_test_split
 
 from torch.autograd import Variable
 from model_search import Network
@@ -90,16 +91,46 @@ def main():
   indices = list(range(num_train))
   split = int(np.floor(args.train_portion * num_train))
 
+  traindir = os.path.join(args.data, 'train')
+
+  normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+
+  train_data = dset.ImageFolder
+    traindir,
+    transforms.Compose([
+      transforms.RandomResizedCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ColorJitter(
+        brightness=0.4,
+        contrast=0.4,
+        saturation=0.4,
+        hue=0.2),
+      transforms.ToTensor(),
+      normalize,
+    ]))
+
+  train_data,valid_data =  train_test_split(train_data,test_size=0.33, random_state=42)
+
+   train_queue = torch.utils.data.DataLoader(
+
+    train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
+
+  valid_queue = torch.utils.data.DataLoader(
+
+    valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=4)
+
+
+  '''
   train_queue = torch.utils.data.DataLoader(
       train_data, batch_size=args.batch_size,
       sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[:split]),
       pin_memory=True, num_workers=2)
-
+  
   valid_queue = torch.utils.data.DataLoader(
       train_data, batch_size=args.batch_size,
       sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[split:num_train]),
       pin_memory=True, num_workers=2)
-
+  '''
   scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, float(args.epochs), eta_min=args.learning_rate_min)
 
