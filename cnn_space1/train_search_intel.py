@@ -12,6 +12,7 @@ import torch.utils
 import torch.nn.functional as F
 import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
+import torchvision.transforms as transforms
 
 from torch.autograd import Variable
 from model_search import Network
@@ -77,6 +78,8 @@ def main():
   model = model.cuda()
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
+
+  '''
   optimizer = torch.optim.SGD(
       model.parameters(),
       args.learning_rate,
@@ -90,7 +93,7 @@ def main():
   indices = list(range(num_train))
   split = int(np.floor(args.train_portion * num_train))
 
-  '''
+  
   train_queue = torch.utils.data.DataLoader(
       train_data, batch_size=args.batch_size,
       sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[:split]),
