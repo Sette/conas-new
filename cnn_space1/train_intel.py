@@ -14,6 +14,7 @@ import torch.utils
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torch.backends.cudnn as cudnn
+from sklearn.model_selection import train_test_split
 
 from torch.autograd import Variable
 from model import NetworkImageNet as Network
