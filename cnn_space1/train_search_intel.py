@@ -14,6 +14,8 @@ import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
 import torchvision.transforms as transforms
 from sklearn.model_selection import train_test_split
+
+
 from torch.autograd import Variable
 from model_search import Network
 from architect import Architect
@@ -79,13 +81,13 @@ def main():
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
 
-  '''
+  
   optimizer = torch.optim.SGD(
       model.parameters(),
       args.learning_rate,
       momentum=args.momentum,
       weight_decay=args.weight_decay)
-
+  '''
   train_transform, valid_transform = utils._data_transforms_cifar10(args)
   train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
 
