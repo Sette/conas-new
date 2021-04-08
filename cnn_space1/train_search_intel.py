@@ -18,7 +18,7 @@ from model_search import Network
 from architect import Architect
 
 
-parser = argparse.ArgumentParser("cifar")
+parser = argparse.ArgumentParser("intel")
 parser.add_argument('--data', type=str, default='../data/intel', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=16, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.025, help='init learning rate')
@@ -54,7 +54,7 @@ fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 
 
-CIFAR_CLASSES = 33
+INTEL_CLASSES = 33
 
 
 def main():
@@ -73,7 +73,7 @@ def main():
 
   criterion = nn.CrossEntropyLoss()
   criterion = criterion.cuda()
-  model = Network(args.init_channels, CIFAR_CLASSES, args.layers, criterion)
+  model = Network(args.init_channels, INTEL_CLASSES, args.layers, criterion)
   model = model.cuda()
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
@@ -83,22 +83,31 @@ def main():
       momentum=args.momentum,
       weight_decay=args.weight_decay)
 
-  train_transform, valid_transform = utils._data_transforms_cifar10(args)
-  train_data = dset.CIFAR10(root=args.data, train=True, download=True, transform=train_transform)
-
-  num_train = len(train_data)
-  indices = list(range(num_train))
-  split = int(np.floor(args.train_portion * num_train))
-
-  train_queue = torch.utils.data.DataLoader(
-      train_data, batch_size=args.batch_size,
-      sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[:split]),
-      pin_memory=True, num_workers=2)
-
-  valid_queue = torch.utils.data.DataLoader(
-      train_data, batch_size=args.batch_size,
-      sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[split:num_train]),
-      pin_memory=True, num_workers=2)
+  traindir = os.path.join(args.data, 'train')
+  #validdir = os.path.join(args.data, 'val')
+  normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+  train_data = dset.ImageFolder(
+    traindir,
+    transforms.Compose([
+      transforms.RandomResizedCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ColorJitter(
+        brightness=0.4,
+        contrast=0.4,
+        saturation=0.4,
+        hue=0.2),
+      transforms.ToTensor(),
+      normalize,
+    ]))
+  #valid_data = dset.ImageFolder(
+   # validdir,
+    #transforms.Compose([
+     # transforms.Resize(256),
+      #transforms.CenterCrop(224),
+      #transforms.ToTensor(),
+      #normalize,
+    #]))
+  train_data, valid_data = train_test_split(train_data, test_size=0.33, random_state=42)
 
   scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, float(args.epochs), eta_min=args.learning_rate_min)
