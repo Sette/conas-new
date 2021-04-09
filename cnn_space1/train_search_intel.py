@@ -110,7 +110,7 @@ def main():
       #transforms.ToTensor(),
       #normalize,
     #]))
-  train_data, valid_data = train_test_split(train_data, test_size=0.33, random_state=42)
+  train_data, valid_data = train_test_split(train_data, test_size=0.10, random_state=42)
   train_data, valid_data = train_test_split(valid_data, test_size=0.33, random_state=42)
 
   train_queue = torch.utils.data.DataLoader(
