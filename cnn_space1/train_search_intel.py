@@ -110,14 +110,23 @@ def main():
       #transforms.ToTensor(),
       #normalize,
     #]))
-  train_data, valid_data = train_test_split(train_data, test_size=0.10, random_state=42)
-  train_data, valid_data = train_test_split(valid_data, test_size=0.33, random_state=42)
+  train_data, valid_data = train_test_split(train_data, test_size=0.30, random_state=42) 
+
+  num_train = len(train_data)
+  indices = list(range(num_train))
+  split = int(np.floor(args.train_portion * num_train))
+
 
   train_queue = torch.utils.data.DataLoader(
-    train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
+      train_data, batch_size=args.batch_size,
+      sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[:split]),
+      pin_memory=True, num_workers=2)
 
   valid_queue = torch.utils.data.DataLoader(
-    valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=4)
+      train_data, batch_size=args.batch_size,
+      sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[split:num_train]),
+      pin_memory=True, num_workers=2)
+
 
   scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, float(args.epochs), eta_min=args.learning_rate_min)
@@ -132,7 +141,7 @@ def main():
     genotype = model.genotype()
     logging.info('genotype = %s', genotype)
 
-    print(F.softmax(model.alphas_normal, dim=-1))
+    print(F.softmax(model.alphas_normal, dim=-1))cone
     print(F.softmax(model.alphas_reduce, dim=-1))
 
     # training
