@@ -55,7 +55,7 @@ fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 
-CLASSES = 1000
+CLASSES = 33
 
 
 class CrossEntropyLabelSmooth(nn.Module):
