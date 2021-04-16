@@ -17,7 +17,7 @@ from model import NetworkCIFAR as Network
 
 
 parser = argparse.ArgumentParser("cifar")
-parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
+parser.add_argument('--data', type=str, default='../data/intel', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=96, help='batch size')
 parser.add_argument('--report_freq', type=float, default=50, help='report frequency')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
@@ -53,18 +53,32 @@ def main():
   logging.info('gpu device = %d' % args.gpu)
   logging.info("args = %s", args)
 
-  genotype = eval("genotypes.%s" % args.arch)
-  model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
-  model = model.cuda()
-  utils.load(model, args.model_path)
+  #genotype = eval("genotypes.%s" % args.arch)
+  #model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
+  #model = model.cuda()
+  #utils.load(model, args.model_path
+  model = utils.load_from_all(mode_path)
 
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
   criterion = nn.CrossEntropyLoss()
   criterion = criterion.cuda()
 
-  _, test_transform = utils._data_transforms_cifar10(args)
-  test_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=test_transform)
+  test_dir = os.path.join(args.data, 'test')
+  normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+  test_data = dset.ImageFolder(
+    traindir,
+    transforms.Compose([
+      transforms.RandomResizedCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ColorJitter(
+        brightness=0.4,
+        contrast=0.4,
+        saturation=0.4,
+        hue=0.2),
+      transforms.ToTensor(),
+      normalize,
+    ]))
 
   test_queue = torch.utils.data.DataLoader(
       test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
