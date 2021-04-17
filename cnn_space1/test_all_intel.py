@@ -40,7 +40,7 @@ log_format = '%(asctime)s %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
     format=log_format, datefmt='%m/%d %I:%M:%S %p')
 
-CIFAR_CLASSES = 10
+CLASSES = 6
 
 class CrossEntropyLabelSmooth(nn.Module):
 
