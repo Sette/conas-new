@@ -167,7 +167,7 @@ def main():
       'best_acc_top1': best_acc_top1,
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
-      utils.save_all(model, os.path.join(args.save, 'weights_'+str(epoch)+'.pt'))
+    utils.save_all(model, os.path.join(args.save, 'weights_'+str(epoch)+'.pt'))
 
   pickle.dump(logits_all, open( "logits.p", "wb" ))
   utils.save_all(model, 'weights.pt')
