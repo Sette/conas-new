@@ -89,27 +89,26 @@ def main():
   #model = model.cuda()
     
 
-models_names = "model.pt"
-for model_name in models_names:
-    print("-----------------------------------------Carregando modelo: ",model_name)
-    model = utils.load_from_all(model_name)
-    #utils.load(model, args.model_path)
+models_names = ["model.pt"]
+print("-----------------------------------------Carregando modelo: ",model_name)
+model = utils.load_from_all(model_name)
+#utils.load(model, args.model_path)
 
-    logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
+logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
-    criterion = nn.CrossEntropyLoss()
-    criterion = criterion.cuda()
+criterion = nn.CrossEntropyLoss()
+criterion = criterion.cuda()
 
-    _, test_transform = utils._data_transforms_cifar10(args)
-    test_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=test_transform)
+_, test_transform = utils._data_transforms_cifar10(args)
+test_data = dset.CIFAR10(root=args.data, train=False, download=True, transform=test_transform)
 
-    test_queue = torch.utils.data.DataLoader(
-        test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
+test_queue = torch.utils.data.DataLoader(
+    test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
 
-    model.drop_path_prob = args.drop_path_prob
-    logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
-    logging.info('test_acc %f', test_acc)
-    pickle.dump(logits_all, open( "logits_.p", "wb" ))
+model.drop_path_prob = args.drop_path_prob
+logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
+logging.info('test_acc %f', test_acc)
+pickle.dump(logits_all, open( "logits_.p", "wb" ))
     
 
 if __name__ == '__main__':
