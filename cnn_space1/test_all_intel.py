@@ -89,7 +89,7 @@ def main():
   #model = model.cuda()
     
 
-models_names = ["search-EXP/weights_"+str(i)+".pt" for i in range(50)]
+models_names = ["EVAL/weights_"+str(i)+".pt" for i in range(50)]
 i = 0
 for model_name in models_names:
     print("-----------------------------------------Carregando modelo: ",model_name)
