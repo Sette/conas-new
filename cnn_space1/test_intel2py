@@ -91,7 +91,7 @@ def main():
 
 model_name = "model.pt"
 print("-----------------------------------------Carregando modelo: ",model_name)
-model = utils.load_from_all(model_name)
+model = utils.load_from_all("model.pt")
 #utils.load(model, args.model_path)
 
 logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
