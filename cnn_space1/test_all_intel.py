@@ -102,8 +102,8 @@ for model_name in models_names:
     criterion = criterion.cuda()
 
     test_dir = os.path.join(args.data, 'test')
-  normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-  test_data = dset.ImageFolder(
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    test_data = dset.ImageFolder(
     test_dir,
     transforms.Compose([
       transforms.RandomResizedCrop(224),
