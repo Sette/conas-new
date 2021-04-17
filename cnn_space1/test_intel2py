@@ -89,7 +89,7 @@ def main():
   #model = model.cuda()
     
 
-model_name = ["model.pt"]
+model_name = "model.pt"
 print("-----------------------------------------Carregando modelo: ",model_name)
 model = utils.load_from_all(model_name)
 #utils.load(model, args.model_path)
