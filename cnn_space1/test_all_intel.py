@@ -1,21 +1,23 @@
 import os
 import sys
 import glob
-import json
 import numpy as np
+import time
 import torch
+import utils
+import pickle
 import utils
 import logging
 import argparse
-import pickle
 import torch.nn as nn
 import genotypes
 import torch.utils
 import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
-import torchvision.transforms as transforms
+from sklearn.model_selection import train_test_split
 from torch.autograd import Variable
 from model import NetworkCIFAR as Network
+import torchvision.transforms as transforms
 
 
 parser = argparse.ArgumentParser("cifar")
@@ -88,6 +90,7 @@ def main():
   #model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
   #model = model.cuda()
     
+
 
 models_names = ["EVAL/weights_"+str(i)+".pt" for i in range(50)]
 i = 0
