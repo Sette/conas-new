@@ -66,7 +66,7 @@ def main():
   #model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
   #model = model.cuda()
   #utils.load(model, args.model_path
-  model = utils.load_from_all(mode_path)
+  model = utils.load_from_all(args.mode_path)
 
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
