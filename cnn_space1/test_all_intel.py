@@ -20,7 +20,7 @@ from model import NetworkCIFAR as Network
 
 parser = argparse.ArgumentParser("cifar")
 parser.add_argument('--data', type=str, default='../data/intel', help='location of the data corpus')
-parser.add_argument('--batch_size', type=int, default=96, help='batch size')
+parser.add_argument('--batch_size', type=int, default=128, help='batch size')
 parser.add_argument('--report_freq', type=float, default=50, help='report frequency')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
 parser.add_argument('--init_channels', type=int, default=36, help='num of init channels')
@@ -66,7 +66,7 @@ def infer(test_queue, model, criterion):
     if step % args.report_freq == 0:
       logging.info('test %03d %e %f %f', step, objs.avg, top1.avg, top5.avg)
 
-  return logits_all, top1.avg, objs.avg
+  return logits_all, logits, top1.avg, objs.avg
 
 
 
@@ -122,7 +122,7 @@ for model_name in models_names:
 
 
     model.drop_path_prob = args.drop_path_prob
-    logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
+    logits_all, logits, test_acc, test_obj = infer(test_queue, model, criterion)
     logging.info('test_acc %f', test_acc)
     pickle.dump("search-EXP/"+logits_all, open( "logits_"+str(i)+".p", "wb" ))
     i += 1
