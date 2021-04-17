@@ -55,7 +55,7 @@ fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 
-CLASSES = 33
+CLASSES = 6
 
 
 class CrossEntropyLabelSmooth(nn.Module):
@@ -133,7 +133,6 @@ def main():
       #transforms.ToTensor(),
       #normalize,
     #]))
-  train_data, valid_data = train_test_split(train_data, test_size=0.33, random_state=42)
 
   train_queue = torch.utils.data.DataLoader(
     train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
@@ -144,6 +143,7 @@ def main():
   scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.decay_period, gamma=args.gamma)
 
   best_acc_top1 = 0
+  i = 0
   for epoch in range(args.epochs):
     scheduler.step()
     logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
@@ -168,9 +168,8 @@ def main():
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
     utils.save_all(model, os.path.join(args.save, 'weights_'+str(epoch)+'.pt'))
-
-  pickle.dump(logits_all, open( "logits.p", "wb" ))
-  utils.save_all(model, 'weights.pt')
+    pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
+    utils.save_all(model, "weights"+str(i)+".pt")
 
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
