@@ -20,6 +20,7 @@ from torch.autograd import Variable
 from model import NetworkCIFAR as Network
 
 
+
 parser = argparse.ArgumentParser("cifar")
 parser.add_argument('--data', type=str, default='../data/intel', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=96, help='batch size')
