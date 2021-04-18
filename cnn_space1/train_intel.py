@@ -125,17 +125,8 @@ def main():
       transforms.ToTensor(),
       normalize,
     ]))
-  test_data = dset.ImageFolder(
-    testdir,
-    transforms.Compose([
-      transforms.Resize(256),
-      transforms.CenterCrop(224),
-      transforms.ToTensor(),
-      normalize,
-    ]))
-
+  
   train_data, valid_data = train_test_split(train_data, test_size=0.33, random_state=42)
-
 
   train_queue = torch.utils.data.DataLoader(
     train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
