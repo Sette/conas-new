@@ -23,7 +23,7 @@ from model import NetworkCIFAR as Network
 
 parser = argparse.ArgumentParser("cifar")
 parser.add_argument('--data', type=str, default='../data/intel', help='location of the data corpus')
-parser.add_argument('--batch_size', type=int, default=96, help='batch size')
+parser.add_argument('--batch_size', type=int, default=128, help='batch size')
 parser.add_argument('--report_freq', type=float, default=50, help='report frequency')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
 parser.add_argument('--init_channels', type=int, default=36, help='num of init channels')
@@ -48,6 +48,21 @@ fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 CIFAR_CLASSES = 10
+
+class CrossEntropyLabelSmooth(nn.Module):
+
+  def __init__(self, num_classes, epsilon):
+    super(CrossEntropyLabelSmooth, self).__init__()
+    self.num_classes = num_classes
+    self.epsilon = epsilon
+    self.logsoftmax = nn.LogSoftmax(dim=1)
+
+  def forward(self, inputs, targets):
+    log_probs = self.logsoftmax(inputs)
+    targets = torch.zeros_like(log_probs).scatter_(1, targets.unsqueeze(1), 1)
+    targets = (1 - self.epsilon) * targets + self.epsilon / self.num_classes
+    loss = (-targets * log_probs).mean(0).sum()
+    return loss
 
 
 def main():
@@ -74,6 +89,8 @@ def main():
 
   criterion = nn.CrossEntropyLoss()
   criterion = criterion.cuda()
+  criterion_smooth = CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
+  criterion_smooth = criterion_smooth.cuda()
 
   test_dir = os.path.join(args.data, 'test')
   normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
