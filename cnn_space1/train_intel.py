@@ -23,7 +23,7 @@ from model import NetworkImageNet as Network
 
 parser = argparse.ArgumentParser("intel")
 parser.add_argument('--data', type=str, default='../data/intel/', help='location of the data corpus')
-parser.add_argument('--batch_size', type=int, default=68, help='batch size')
+parser.add_argument('--batch_size', type=int, default=128, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.1, help='init learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=3e-5, help='weight decay')
@@ -110,10 +110,10 @@ def main():
     )
 
   traindir = os.path.join(args.data, 'train')
-  valdir = os.path.join(args.data, 'test')
+  validdir = os.path.join(args.data, 'val')
   normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-  val_data = dset.ImageFolder(
-    val_data,
+  train_data = dset.ImageFolder(
+    traindir,
     transforms.Compose([
       transforms.RandomResizedCrop(224),
       transforms.RandomHorizontalFlip(),
@@ -125,16 +125,20 @@ def main():
       transforms.ToTensor(),
       normalize,
     ]))
-    
-  valid_data_train,val_data = train_test_split(val_data, test_size = 0.30,random_state=42)
-
+  valid_data = dset.ImageFolder(
+    validdir,
+    transforms.Compose([
+      transforms.Resize(256),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+      normalize,
+    ]))
 
   train_queue = torch.utils.data.DataLoader(
     train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
-  
 
-  valid_data_train = torch.utils.data.DataLoader(
-  valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=4)
+  valid_queue = torch.utils.data.DataLoader(
+    valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=4)
 
   scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.decay_period, gamma=args.gamma)
 
