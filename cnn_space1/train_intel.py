@@ -126,9 +126,15 @@ def main():
       normalize,
     ]))
   
+   valid_data_train,valid_data = train_test_split(valid_data, test_size = 0.30,random_state=42)
+
+
   train_queue = torch.utils.data.DataLoader(
     train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
-  valid_data_train,valid_data = train_test_split(valid_data, test_size = 0.30,random_state=42)
+  
+ 
+  
+  
     valid_data_train = torch.utils.data.DataLoader(
   valid_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=4)
 
