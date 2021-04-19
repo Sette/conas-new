@@ -23,7 +23,7 @@ from model import NetworkImageNet as Network
 
 parser = argparse.ArgumentParser("intel")
 parser.add_argument('--data', type=str, default='../data/intel/', help='location of the data corpus')
-parser.add_argument('--batch_size', type=int, default=128, help='batch size')
+parser.add_argument('--batch_size', type=int, default=68, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.1, help='init learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=3e-5, help='weight decay')
@@ -110,10 +110,10 @@ def main():
     )
 
   traindir = os.path.join(args.data, 'train')
-  testdir = os.path.join(args.data, 'test')
+  valdir = os.path.join(args.data, 'test')
   normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-  train_data = dset.ImageFolder(
-    traindir,
+  val_data = dset.ImageFolder(
+    val_data,
     transforms.Compose([
       transforms.RandomResizedCrop(224),
       transforms.RandomHorizontalFlip(),
@@ -126,8 +126,6 @@ def main():
       normalize,
     ]))
   
-  train_data, valid_data = train_test_split(train_data, test_size=0.33, random_state=42)
-
   train_queue = torch.utils.data.DataLoader(
     train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
 
