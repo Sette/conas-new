@@ -47,7 +47,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO,
 fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
-CIFAR_CLASSES = 10
+CLASSES = 6
 
 class CrossEntropyLabelSmooth(nn.Module):
 
@@ -79,10 +79,10 @@ def main():
   logging.info('gpu device = %d' % args.gpu)
   logging.info("args = %s", args)
 
-  genotype = eval("genotypes.%s" % args.arch)
-  model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
-  model = model.cuda()
-  utils.load(model, args.model_path)
+  #genotype = eval("genotypes.%s" % args.arch)
+  #model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
+  #model = model.cuda()
+  model =  utils.load_from_all(args.model_path)
   
 
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
