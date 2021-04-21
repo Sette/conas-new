@@ -113,7 +113,9 @@ def main():
       test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
 
   model.drop_path_prob = args.drop_path_prob
-  test_acc, test_obj = infer(test_queue, model, criterion)
+  logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
+  pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
+
   logging.info('test_acc %f', test_acc)
 
 
@@ -122,12 +124,13 @@ def infer(test_queue, model, criterion):
   top1 = utils.AvgrageMeter()
   top5 = utils.AvgrageMeter()
   model.eval()
-
+  logits_all = []
   for step, (input, target) in enumerate(test_queue):
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
 
     logits, _ = model(input)
+    logits_all.append(logits)
     loss = criterion(logits, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
@@ -139,7 +142,7 @@ def infer(test_queue, model, criterion):
     if step % args.report_freq == 0:
       logging.info('test %03d %e %f %f', step, objs.avg, top1.avg, top5.avg)
 
-  return top1.avg, objs.avg
+  return logits, top1.avg, objs.avg
 
 
 if __name__ == '__main__':
