@@ -114,7 +114,6 @@ def main():
 
   model.drop_path_prob = args.drop_path_prob
   logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
-  pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
 
   logging.info('test_acc %f', test_acc)
 
@@ -125,6 +124,7 @@ def infer(test_queue, model, criterion):
   top5 = utils.AvgrageMeter()
   model.eval()
   logits_all = []
+  i = 0
   for step, (input, target) in enumerate(test_queue):
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
@@ -132,6 +132,8 @@ def infer(test_queue, model, criterion):
     logits, _ = model(input)
     logits_all.append(logits)
     loss = criterion(logits, target)
+    pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
+    i+=1
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
