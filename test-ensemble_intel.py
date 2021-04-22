@@ -106,9 +106,7 @@ for step, (input, target) in enumerate(test_queue):
     logits2 = pickle.load( open( path_logits2 + "/logits"+str(x)+".p", "rb" ) )
     logits3 = pickle.load( open( path_logits3 + "/logits"+str(x)+".p", "rb" ) )
     logits = copy.deepcopy(logits1)
-    for i in range(len(logits)):
-        for j in range(len(logits)):
-            logits[i][j] = logits[i][j] + logits2[i][j] + logits3[i][j]
+    logits = torch.add(logits, logits2,logits3)
 
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
