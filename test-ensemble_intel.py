@@ -10,7 +10,6 @@ import utils
 import logging
 import argparse
 import torch.nn as nn
-import genotypes
 import torch.utils
 import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
@@ -51,7 +50,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 
-save = path_logits+'/test-{}-{}'.format("ENS", time.strftime("%Y%m%d-%H%M%S"))
+save =  +'/test-{}-{}'.format("ENS", time.strftime("%Y%m%d-%H%M%S"))
 utils.create_exp_dir(save, scripts_to_save=glob.glob('*.py'))
 
 log_format = '%(asctime)s %(message)s'
