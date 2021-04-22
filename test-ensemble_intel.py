@@ -123,6 +123,8 @@ for step, (input, target) in enumerate(test_queue):
     x+=1
 
 print(prec_all)
+
+
 '''
 for x in range(23):
 
@@ -150,22 +152,3 @@ for x in range(23):
     top5.update(prec5.data[0], n)
 
 '''
-
-
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-
-x = range(23)
-
-mpl.style.use("seaborn")
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.set_title('Acc by batch', color='C0')
-ax.set_ylabel('Acc')
-ax.set_xlabel('Batch')
-ax.plot(x, prec_all, 'C1', label='Space A')
-#ax.plot(x, acc_2_all, 'C2', label='Space B')
-#ax.plot(x, acc_3_all, 'C3', label='Space C')
-#ax.plot(x, acc_ensemble_all, 'C4', label='Ensemble')
-#ax.plot(x, acc_darts_all, 'C5', label='Darts')
-ax.legend()
-plt.savefig('books_read.png')
