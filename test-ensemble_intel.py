@@ -16,7 +16,7 @@ import torch.backends.cudnn as cudnn
 from sklearn.model_selection import train_test_split
 import torchvision.transforms as transforms
 from torch.autograd import Variable
-
+import copy
 
 
 path_logits = "logits"
@@ -109,7 +109,7 @@ for step, (input, target) in enumerate(test_queue):
     for i in range(len(logits)):
         for j in range(len(logits[i])):
             logits[i][j] = logits[i][j] + logits2[i][j] + logits3[i][j]
-            
+
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
     
@@ -151,3 +151,22 @@ for x in range(23):
     top5.update(prec5.data[0], n)
 
 '''
+
+
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+x = range(23)
+
+mpl.style.use("seaborn")
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.set_title('Acc by batch', color='C0')
+ax.set_ylabel('Acc')
+ax.set_xlabel('Batch')
+ax.plot(x, prec_all, 'C1', label='Space A')
+#ax.plot(x, acc_2_all, 'C2', label='Space B')
+#ax.plot(x, acc_3_all, 'C3', label='Space C')
+#ax.plot(x, acc_ensemble_all, 'C4', label='Ensemble')
+#ax.plot(x, acc_darts_all, 'C5', label='Darts')
+ax.legend()
+plt.savefig('books_read.png')
