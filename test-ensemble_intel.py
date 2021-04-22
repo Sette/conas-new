@@ -114,7 +114,7 @@ for step, (input, target) in enumerate(test_queue):
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
     
-    loss = criterion(logits, target)
+    loss = criterion(logits1, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
