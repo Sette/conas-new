@@ -130,9 +130,8 @@ def infer(test_queue, model, criterion):
     target = Variable(target, volatile=True).cuda(async=True)
 
     logits, _ = model(input)
-    logits_all.append(logits)
     loss = criterion(logits, target)
-    pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
+    pickle.dump(logits, open( "logits"+str(i)+".p", "wb" ))
     i+=1
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
