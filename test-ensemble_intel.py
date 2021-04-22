@@ -24,7 +24,7 @@ path_logits_darts = path_logits + "logits_intel"
 path_logits1 = path_logits + "logits1"
 path_logits2 = path_logits + "logits2"
 path_logits3 = path_logits + "logits3"
-path_dataset = "/data/intel "
+path_dataset = "/data/intel"
 
 
 import pickle
@@ -64,7 +64,7 @@ import torchvision.transforms as transforms
 import torch
 import torchvision.datasets as dset
 import os
-test_dir = os.path.join(path_dataset, 'test')
+test_dir = os.path.join(path_dataset,'test')
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 test_data = dset.ImageFolder(
     test_dir,
