@@ -78,7 +78,7 @@ logging.getLogger().addHandler(fh)
 
 criterion = nn.CrossEntropyLoss()
 criterion = criterion.cuda()
-criterion_smooth = CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
+criterion_smooth = CrossEntropyLabelSmooth(CLASSES, 0.1)
 criterion_smooth = criterion_smooth.cuda()
 
 
