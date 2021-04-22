@@ -86,6 +86,7 @@ test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=Fals
 objs = utils.AvgrageMeter()
 top1 = utils.AvgrageMeter()
 top5 = utils.AvgrageMeter()
+x = 0
 logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
 for step, (input, target) in enumerate(test_queue):
     input = Variable(input, volatile=True).cuda()
@@ -98,6 +99,7 @@ for step, (input, target) in enumerate(test_queue):
     objs.update(loss.data[0], n)
     top1.update(prec1.data[0], n)
     top5.update(prec5.data[0], n)
+    x+=1
 
 '''
 for x in range(23):
