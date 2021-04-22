@@ -109,7 +109,7 @@ for step, (input, target) in enumerate(test_queue):
     logits = torch.add(logits, logits2,logits3)
     for i in range(len(logits)):
         logits[i] = torch.add(logits[i],logits2[i])
-        logits[i] torch.add(logits[i],logits3[i])
+        logits[i] =torch.add(logits[i],logits3[i])
 
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
