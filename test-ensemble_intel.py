@@ -49,7 +49,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 
-save =  +'/test-{}-{}'.format("ENS", time.strftime("%Y%m%d-%H%M%S"))
+save = path_logits +'/test-{}-{}'.format("ENS", time.strftime("%Y%m%d-%H%M%S"))
 utils.create_exp_dir(save, scripts_to_save=glob.glob('*.py'))
 
 log_format = '%(asctime)s %(message)s'
