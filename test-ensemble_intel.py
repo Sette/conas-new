@@ -107,7 +107,8 @@ for step, (input, target) in enumerate(test_queue):
     logits3 = pickle.load( open( path_logits3 + "/logits"+str(x)+".p", "rb" ) )
     logits = copy.deepcopy(logits1)
     for i in range(len(logits)):
-        logits[i] = logits[i] + logits2[i] + logits3[i]
+        for j in range(len(logits))
+            logits[i][j] = logits[i][j] + logits2[i][j] + logits3[i][j]
 
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
@@ -116,13 +117,14 @@ for step, (input, target) in enumerate(test_queue):
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     prec_all.append(prec1)
+    print(prec_all)
     n = input.size(0)
     objs.update(loss.data[0], n)
     top1.update(prec1.data[0], n)
     top5.update(prec5.data[0], n)
     x+=1
 
-print(prec_all)
+
 
 
 '''
