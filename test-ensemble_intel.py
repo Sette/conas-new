@@ -109,8 +109,8 @@ objs = utils.AvgrageMeter()
 top1 = utils.AvgrageMeter()
 top5 = utils.AvgrageMeter()
 x = 0
-logits1 = pickle.load( open( path_logits1 + "/logits"+str(23)+".p", "rb" ) )
 for step, (input, target) in enumerate(test_queue):
+    logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
     
