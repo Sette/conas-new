@@ -48,6 +48,8 @@ from torch.autograd import Variable
 import torchvision
 import torchvision.transforms as transforms
 
+CLASSES = 6 
+
 class CrossEntropyLabelSmooth(nn.Module):
 
   def __init__(self, num_classes, epsilon):
