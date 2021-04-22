@@ -59,6 +59,11 @@ fh = logging.FileHandler(os.path.join(save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 
+criterion = nn.CrossEntropyLoss()
+criterion = criterion.cuda()
+criterion_smooth = CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
+criterion_smooth = criterion_smooth.cuda()
+
 
 import torchvision.transforms as transforms
 import torch
