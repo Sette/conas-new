@@ -24,7 +24,7 @@ path_logits_darts = path_logits + "logits_intel"
 path_logits1 = path_logits + "logits1"
 path_logits2 = path_logits + "logits2"
 path_logits3 = path_logits + "logits3"
-path_dataset = "/data/intel"
+path_dataset = "data/intel/"
 
 
 import pickle
