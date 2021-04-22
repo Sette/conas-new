@@ -100,15 +100,6 @@ top1 = utils.AvgrageMeter()
 top5 = utils.AvgrageMeter()
 x = 0
 
-logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
-logits2 = pickle.load( open( path_logits2 + "/logits"+str(x)+".p", "rb" ) )
-logits3 = pickle.load( open( path_logits3 + "/logits"+str(x)+".p", "rb" ) )
-logits = copy.deepcopy(logits1)
-
-for i in range(len(logits)):
-    for j in range(len(logits[i])):
-      logits[i][j] = logits[i][j] + logits2[i][j] + logits3[i][j]
-
 prec_all = []
 for step, (input, target) in enumerate(test_queue):
     logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
