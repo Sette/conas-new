@@ -65,11 +65,12 @@ test_data = dset.ImageFolder(
 test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=False, pin_memory=True, num_workers=2)
 
 
-logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
-logits2 = pickle.load( open( path_logits2 + "/logits0.p", "rb" ) )
-logits3 = pickle.load( open( path_logits3 + "/logits0.p", "rb" ) )
+
 
 for i in range(len(logits1)):
+	logits1 = pickle.load( open( path_logits1 + "/logits"+str(i)+".p", "rb" ) )
+	logits2 = pickle.load( open( path_logits2 + "/logits"+str(i)+".p", "rb" ) )
+	logits3 = pickle.load( open( path_logits3 + "/logits"+str(i)+".p", "rb" ) )
 	logits = torch.add(logits1,logits2)
 	logits = torch.add(logits,logits3)
-	print(torch.add(logits1,logits2)[1])
+	print(logits[1])
