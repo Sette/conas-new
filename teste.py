@@ -62,8 +62,7 @@ test_data = dset.ImageFolder(
       normalize,
     ]))
 
-  test_queue = torch.utils.data.DataLoader(
-      test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
+test_queue = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
 
 
 logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
