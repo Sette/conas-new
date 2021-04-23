@@ -71,57 +71,5 @@ logits3 = pickle.load( open( path_logits3 + "/logits0.p", "rb" ) )
 
 for i in range(len(logits1)):
 	logits = torch.add(logits1,logits2)
+	logits = torch.add(logits,logits3)
 	print(torch.add(logits1,logits2)[1])
-
-'''
-predicted_darts = []
-for out in logits_darts:
-  _, predicted = torch.max(out.data, 1)
-  preds = predicted.cpu().detach().numpy()
-  for pred in preds:
-    predicted_darts.append(pred)
-'''
-predicted_all = []
-for out in logits:
-  _, predicted = torch.max(out.data, 1)
-  preds = predicted.cpu().detach().numpy()
-  for pred in preds:
-    predicted_all.append(pred)
-
-predicted_space1 = []
-for out in logits1:
-  _, predicted = torch.max(out.data, 1)
-  preds = predicted.cpu().detach().numpy()
-  for pred in preds:
-    predicted_space1.append(pred)
-
-predicted_space2 = []
-for out in logits2:
-  _, predicted = torch.max(out.data, 1)
-  preds = predicted.cpu().detach().numpy()
-  for pred in preds:
-    predicted_space2.append(pred)
-
-predicted_space3 = []
-for out in logits3:
-  _, predicted = torch.max(out.data, 1)
-  preds = predicted.cpu().detach().numpy()
-  for pred in preds:
-    predicted_space3.append(pred)
-
-targets_all = []
-for step, (input, target) in enumerate(valid_queue):
-    input = Variable(input, volatile=True).cuda()
-    targets = Variable(target, volatile=True).cuda(async=True)
-    targets = targets.cpu().detach().numpy()
-    targets_all.extend(targets)
-
-print(len(targets_all))
-print(len(predicted_all))
-
-from sklearn.metrics import accuracy_score
-print(100*accuracy_score(predicted_darts,targets_all))
-print(100*accuracy_score(predicted_all,targets_all))
-print(100*accuracy_score(predicted_space1,targets_all))
-print(100*accuracy_score(predicted_space2,targets_all))
-print(100*accuracy_score(predicted_space3,targets_all))
