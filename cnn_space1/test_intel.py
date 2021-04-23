@@ -133,7 +133,8 @@ def infer(test_queue, model, criterion):
     loss = criterion(logits, target)
     pickle.dump(logits, open( "logits"+str(i)+".p", "wb" ))
     i+=1
-
+    print(target)
+    break
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
     objs.update(loss.data[0], n)
