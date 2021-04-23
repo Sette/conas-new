@@ -139,6 +139,7 @@ def main():
 
   best_acc_top1 = 0
   i = 0
+  logits_all = []
   for epoch in range(args.epochs):
     scheduler.step()
     logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
@@ -147,7 +148,8 @@ def main():
     train_acc, train_obj = train(train_queue, model, criterion_smooth, optimizer)
     logging.info('train_acc %f', train_acc)
 
-    logits_all, valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
+    logits, valid_acc_top1, valid_acc_top5, valid_obj = infer(valid_queue, model, criterion)
+    logits_all.append(logits)
     logging.info('valid_acc_top1 %f', valid_acc_top1)
     logging.info('valid_acc_top5 %f', valid_acc_top5)
 
@@ -205,13 +207,11 @@ def infer(valid_queue, model, criterion):
   top1 = utils.AvgrageMeter()
   top5 = utils.AvgrageMeter()
   model.eval()
-  logits_all = []
   for step, (input, target) in enumerate(valid_queue):
     input = Variable(input, volatile=True).cuda()
     target = Variable(target, volatile=True).cuda(async=True)
 
     logits, _ = model(input)
-    logits_all.append(logits)
     loss = criterion(logits, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
@@ -223,7 +223,7 @@ def infer(valid_queue, model, criterion):
     if step % args.report_freq == 0:
       logging.info('valid %03d %e %f %f', step, objs.avg, top1.avg, top5.avg)
 
-  return logits_all, top1.avg, top5.avg, objs.avg
+  return logits, top1.avg, top5.avg, objs.avg
 
 
 if __name__ == '__main__':
