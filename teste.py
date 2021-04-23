@@ -64,7 +64,7 @@ test_data = dset.ImageFolder(
 
 test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=False, pin_memory=True, num_workers=2)
 
-
+'''
 logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
 for i in range(23):
 	logits1 = pickle.load( open( path_logits1 + "/logits"+str(i)+".p", "rb" ) )
@@ -73,3 +73,24 @@ for i in range(23):
 	logits = torch.add(logits1,logits2)
 	logits = torch.add(logits,logits3)
 	print(logits[1])
+'''
+
+x = 0
+for step, (input, target) in enumerate(test_queue):
+	input = Variable(input, volatile=True).cuda()
+    target = Variable(target, volatile=True).cuda(async=True)
+	logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
+	logits2 = pickle.load( open( path_logits2 + "/logits"+str(x)+".p", "rb" ) )
+	logits3 = pickle.load( open( path_logits3 + "/logits"+str(x)+".p", "rb" ) )
+	logits = torch.add(logits1,logits2)
+	logits = torch.add(logits,logits3)
+	print(logits[1])
+	loss = criterion(logits, target)
+
+	prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
+    n = input.size(0)
+    objs.update(loss.data[0], n)
+    top1.update(prec1.data[0], n)
+    top5.update(prec5.data[0], n)
+
+
