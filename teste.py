@@ -46,7 +46,7 @@ path_logits2 = path_logits+"/logits2"
 path_logits3 = path_logits+"/logits3"
 path_dataset = "data/intel/"
 
-test_dir = os.path.join(args.data, 'test')
+test_dir = os.path.join("../data/intel", 'test')
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 test_data = dset.ImageFolder(
     test_dir,
@@ -62,7 +62,7 @@ test_data = dset.ImageFolder(
       normalize,
     ]))
 
-test_queue = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
+test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=False, pin_memory=True, num_workers=2)
 
 
 logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
