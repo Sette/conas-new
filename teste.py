@@ -75,4 +75,4 @@ for i in range(23):
 	logits = torch.add(logits,logits3)
 	print(logits[1])
 
-
+'''
