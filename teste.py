@@ -117,3 +117,10 @@ for step, (input, target) in enumerate(valid_queue):
 
 print(len(targets_all))
 print(len(predicted_all))
+
+from sklearn.metrics import accuracy_score
+print(100*accuracy_score(predicted_darts,targets_all))
+print(100*accuracy_score(predicted_all,targets_all))
+print(100*accuracy_score(predicted_space1,targets_all))
+print(100*accuracy_score(predicted_space2,targets_all))
+print(100*accuracy_score(predicted_space3,targets_all))
