@@ -66,12 +66,10 @@ test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=Fals
 
 
 logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
-x = 0
-for i in range(len(logits1)):
-	logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
-	logits2 = pickle.load( open( path_logits2 + "/logits"+str(x)+".p", "rb" ) )
-	logits3 = pickle.load( open( path_logits3 + "/logits"+str(x)+".p", "rb" ) )
+for i in range(23)):
+	logits1 = pickle.load( open( path_logits1 + "/logits"+str(i)+".p", "rb" ) )
+	logits2 = pickle.load( open( path_logits2 + "/logits"+str(i)+".p", "rb" ) )
+	logits3 = pickle.load( open( path_logits3 + "/logits"+str(i)+".p", "rb" ) )
 	logits = torch.add(logits1,logits2)
 	logits = torch.add(logits,logits3)
 	print(logits[1])
-	x += 1
