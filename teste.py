@@ -1,5 +1,44 @@
 import pickle
 import torch
+import os
+import pickle
+import sys
+import numpy as np
+from torch.autograd import Variable
+import time
+import torch
+import utils
+import glob
+import random
+import logging
+import argparse
+import torch.nn as nn
+import torch.utils
+import torchvision.datasets as dset
+import torchvision.transforms as transforms
+import torch.backends.cudnn as cudnn
+
+class CrossEntropyLabelSmooth(nn.Module):
+
+  def __init__(self, num_classes, epsilon):
+    super(CrossEntropyLabelSmooth, self).__init__()
+    self.num_classes = num_classes
+    self.epsilon = epsilon
+    self.logsoftmax = nn.LogSoftmax(dim=1)
+
+  def forward(self, inputs, targets):
+    log_probs = self.logsoftmax(inputs)
+    targets = torch.zeros_like(log_probs).scatter_(1, targets.unsqueeze(1), 1)
+    targets = (1 - self.epsilon) * targets + self.epsilon / self.num_classes
+    loss = (-targets * log_probs).mean(0).sum()
+    return loss	
+
+criterion = nn.CrossEntropyLoss()
+criterion = criterion.cuda()
+criterion_smooth = CrossEntropyLabelSmooth(10, 0.1)
+criterion_smooth = criterion_smooth.cuda()
+
+
 path_logits = "logits"
 path_logits_darts = path_logits + "logits_intel"
 path_logits1 = path_logits+"/logits1"
@@ -7,10 +46,75 @@ path_logits2 = path_logits+"/logits2"
 path_logits3 = path_logits+"/logits3"
 path_dataset = "data/intel/"
 
+test_dir = os.path.join(args.data, 'test')
+  normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+  test_data = dset.ImageFolder(
+    test_dir,
+    transforms.Compose([
+      transforms.RandomResizedCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ColorJitter(
+        brightness=0.4,
+        contrast=0.4,
+        saturation=0.4,
+        hue=0.2),
+      transforms.ToTensor(),
+      normalize,
+    ]))
+
+  test_queue = torch.utils.data.DataLoader(
+      test_data, batch_size=args.batch_size, shuffle=False, pin_memory=True, num_workers=2)
+
 
 logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
 logits2 = pickle.load( open( path_logits2 + "/logits0.p", "rb" ) )
 logits3 = pickle.load( open( path_logits3 + "/logits0.p", "rb" ) )
 
 for i in range(len(logits1)):
-	print(torch.add(logits1,logits2)[1])
+	print(torch.add(logits1,logits2,logits3)[1])
+
+
+predicted_darts = []
+for out in logits_darts:
+  _, predicted = torch.max(out.data, 1)
+  preds = predicted.cpu().detach().numpy()
+  for pred in preds:
+    predicted_darts.append(pred)
+
+predicted_all = []
+for out in logits:
+  _, predicted = torch.max(out.data, 1)
+  preds = predicted.cpu().detach().numpy()
+  for pred in preds:
+    predicted_all.append(pred)
+
+predicted_space1 = []
+for out in logits1:
+  _, predicted = torch.max(out.data, 1)
+  preds = predicted.cpu().detach().numpy()
+  for pred in preds:
+    predicted_space1.append(pred)
+
+predicted_space2 = []
+for out in logits2:
+  _, predicted = torch.max(out.data, 1)
+  preds = predicted.cpu().detach().numpy()
+  for pred in preds:
+    predicted_space2.append(pred)
+
+predicted_space3 = []
+for out in logits3:
+  _, predicted = torch.max(out.data, 1)
+  preds = predicted.cpu().detach().numpy()
+  for pred in preds:
+    predicted_space3.append(pred)
+
+targets_all = []
+for step, (input, target) in enumerate(valid_queue):
+    input = Variable(input, volatile=True).cuda()
+    targets = Variable(target, volatile=True).cuda(async=True)
+    targets = targets.cpu().detach().numpy()
+    targets_all.extend(targets)
+
+print(len(targets_all))
+print(len(predicted_all))
