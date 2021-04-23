@@ -67,7 +67,7 @@ test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=Fals
 logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
 print(len(logits1))
 for i in range(len(logits1)):
-	logits1[i] = np.argmax(np.array(logits1[i]))
+	logits1[i] = np.argmax(logits1[i].cpu().detach().numpy())
 
 print(logits1)
 '''
