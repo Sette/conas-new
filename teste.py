@@ -64,8 +64,8 @@ test_data = dset.ImageFolder(
 
 test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=False, pin_memory=True, num_workers=2)
 '''
-logits1 = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
-print(len(logits1))
+logits = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
+print(len(logits))
 print(np.argmax(logits.cpu().detach().numpy())
 )
 '''
