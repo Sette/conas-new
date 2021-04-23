@@ -70,16 +70,17 @@ logits2 = pickle.load( open( path_logits2 + "/logits0.p", "rb" ) )
 logits3 = pickle.load( open( path_logits3 + "/logits0.p", "rb" ) )
 
 for i in range(len(logits1)):
-	print(torch.add(logits1,logits2,logits3)[1])
+	logits = torch.add(logits1,logits2)
+	print(torch.add(logits1,logits2)[1])
 
-
+'''
 predicted_darts = []
 for out in logits_darts:
   _, predicted = torch.max(out.data, 1)
   preds = predicted.cpu().detach().numpy()
   for pred in preds:
     predicted_darts.append(pred)
-
+'''
 predicted_all = []
 for out in logits:
   _, predicted = torch.max(out.data, 1)
