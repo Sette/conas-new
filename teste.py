@@ -74,7 +74,9 @@ for i in range(23):
 	logits = torch.add(logits,logits3)
 	print(logits[1])
 '''
-
+objs = utils.AvgrageMeter()
+top1 = utils.AvgrageMeter()
+top5 = utils.AvgrageMeter()
 x = 0
 for step, (input, target) in enumerate(test_queue):
 	input = Variable(input, volatile=True).cuda()
