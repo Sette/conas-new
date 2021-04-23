@@ -78,7 +78,7 @@ for i in range(23):
 x = 0
 for step, (input, target) in enumerate(test_queue):
 	input = Variable(input, volatile=True).cuda()
-    target = Variable(target, volatile=True).cuda(async=True)
+	target = Variable(target, volatile=True).cuda(async=True)
 	logits1 = pickle.load( open( path_logits1 + "/logits"+str(x)+".p", "rb" ) )
 	logits2 = pickle.load( open( path_logits2 + "/logits"+str(x)+".p", "rb" ) )
 	logits3 = pickle.load( open( path_logits3 + "/logits"+str(x)+".p", "rb" ) )
