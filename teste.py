@@ -85,8 +85,8 @@ for i in range(23):
 
 predicted_all = []
 for out in logits:
-  predicted = torch.max(out.data)
-  preds = predicted
+  predicted = torch.max(out.data,1)
+  pred = predicted
   predicted_all.append(pred)
 
 
