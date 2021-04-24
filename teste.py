@@ -45,7 +45,8 @@ path_logits1 = path_logits+"/logits1"
 path_logits2 = path_logits+"/logits2"
 path_logits3 = path_logits+"/logits3"
 path_dataset = "data/intel/"
-'''
+
+
 test_dir = os.path.join("data/intel", 'test')
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 test_data = dset.ImageFolder(
@@ -63,6 +64,8 @@ test_data = dset.ImageFolder(
     ]))
 
 test_queue = torch.utils.data.DataLoader(test_data, batch_size=128, shuffle=False, pin_memory=True, num_workers=2)
+
+
 '''
 logits = pickle.load( open( path_logits1 + "/logits0.p", "rb" ) )
 print(len(logits))
@@ -70,6 +73,7 @@ for i in range(lenn(logits)):
 	a = torch.argmax(logits[i])
 	print(a)
 '''
+
 for i in range(23):
 	logits1 = pickle.load( open( path_logits1 + "/logits"+str(i)+".p", "rb" ) )
 	logits2 = pickle.load( open( path_logits2 + "/logits"+str(i)+".p", "rb" ) )
@@ -78,4 +82,18 @@ for i in range(23):
 	logits = torch.add(logits,logits3)
 	print(logits[1])
 
-'''
+
+predicted_all = []
+for out in logits:
+  _, predicted = torch.max(out.data, 1)
+  preds = predicted.cpu().detach().numpy()
+  for pred in preds:
+    predicted_all.append(pred)
+
+
+targets_all = []
+for step, (input, target) in enumerate(valid_queue):
+    input = Variable(input, volatile=True).cuda()
+    targets = Variable(target, volatile=True).cuda(async=True)
+    targets = targets.cpu().detach().numpy()
+    targets_all.extend(targets)
