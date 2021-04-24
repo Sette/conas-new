@@ -92,7 +92,7 @@ for out in logits:
 
 
 targets_all = []
-for step, (input, target) in enumerate(valid_queue):
+for step, (input, target) in enumerate(test_queue):
     input = Variable(input, volatile=True).cuda()
     targets = Variable(target, volatile=True).cuda(async=True)
     targets = targets.cpu().detach().numpy()
