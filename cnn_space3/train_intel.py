@@ -164,9 +164,9 @@ def main():
       'best_acc_top1': best_acc_top1,
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
-    utils.save_all(model, os.path.join(args.save, 'weights_'+str(epoch)+'.pt'))
-    pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
-    i += 1
+  utils.save_all(model, os.path.join(args.save, 'model.pt'))
+
+  
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
   top1 = utils.AvgrageMeter()
