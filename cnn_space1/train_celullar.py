@@ -22,7 +22,7 @@ from model import NetworkImageNet as Network
 
 
 parser = argparse.ArgumentParser("intel")
-parser.add_argument('--data', type=str, default='../data/intel/', help='location of the data corpus')
+parser.add_argument('--data', type=str, default='../data/cellular/', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=128, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.1, help='init learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
@@ -138,7 +138,6 @@ def main():
   scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.decay_period, gamma=args.gamma)
 
   best_acc_top1 = 0
-  i = 0
   logits_all = []
   for epoch in range(args.epochs):
     scheduler.step()
@@ -164,9 +163,8 @@ def main():
       'best_acc_top1': best_acc_top1,
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
-    utils.save_all(model, os.path.join(args.save, 'weights_'+str(epoch)+'.pt'))
-    pickle.dump(logits_all, open( "logits"+str(i)+".p", "wb" ))
-    i += 1
+  utils.save_all(model, 'model.pt')
+    
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
   top1 = utils.AvgrageMeter()
