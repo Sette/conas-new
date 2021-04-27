@@ -48,7 +48,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO,
 fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
-CLASSES = 6
+CLASSES =4
 
 class CrossEntropyLabelSmooth(nn.Module):
 
