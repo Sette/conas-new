@@ -114,7 +114,7 @@ def main():
 
   model.drop_path_prob = args.drop_path_prob
   logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
-  pickle.dump(logits_all, open( "logits_cellular.p", "wb" ))
+  pickle.dump(logits_all, open( "logits_cellulas.p", "wb" ))
   logging.info('test_acc %f', test_acc)
 
 

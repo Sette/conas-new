@@ -163,7 +163,7 @@ def main():
       'best_acc_top1': best_acc_top1,
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
-  utils.save_all(model, 'model_cellular.pt')
+  utils.save_all(model, 'model_cellulas.pt')
     
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
