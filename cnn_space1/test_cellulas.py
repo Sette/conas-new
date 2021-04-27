@@ -48,7 +48,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO,
 fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
-CLASSES = 6
+CLASSES = 33
 
 class CrossEntropyLabelSmooth(nn.Module):
 
@@ -114,8 +114,8 @@ def main():
 
   model.drop_path_prob = args.drop_path_prob
   logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
-  pickle.dump(logits_all, open( "logits_cellulas.p", "wb" ))
   logging.info('test_acc %f', test_acc)
+  pickle.dump(logits_all, open( "logits_cellulas.p", "wb" ))
 
 
 def infer(test_queue, model, criterion):
