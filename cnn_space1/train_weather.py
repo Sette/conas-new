@@ -21,7 +21,7 @@ from torch.autograd import Variable
 from model import NetworkImageNet as Network
 
 
-parser = argparse.ArgumentParser("cellular")
+parser = argparse.ArgumentParser("intel")
 parser.add_argument('--data', type=str, default='../data/weather/', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=128, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.1, help='init learning rate')
@@ -127,7 +127,7 @@ def main():
     ]))
   
 
-  train_data, valid_data = train_test_split(train_data ,test_size=0.33, random_state=42, shuffle=True)
+  train_data, valid_data = train_test_split(train_data ,test_size=0.33, random_state=42)
 
   train_queue = torch.utils.data.DataLoader(
     train_data, batch_size=args.batch_size, shuffle=True, pin_memory=True, num_workers=4)
@@ -138,6 +138,7 @@ def main():
   scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.decay_period, gamma=args.gamma)
 
   best_acc_top1 = 0
+  i = 0
   logits_all = []
   for epoch in range(args.epochs):
     scheduler.step()
@@ -163,8 +164,9 @@ def main():
       'best_acc_top1': best_acc_top1,
       'optimizer' : optimizer.state_dict(),
       }, is_best, args.save)
-  utils.save_all(model, 'model_weather.pt')
-    
+  utils.save_all(model,'model.pt')
+
+  
 def train(train_queue, model, criterion, optimizer):
   objs = utils.AvgrageMeter()
   top1 = utils.AvgrageMeter()
