@@ -80,10 +80,10 @@ def main():
   logging.info('gpu device = %d' % args.gpu)
   logging.info("args = %s", args)
 
-  #genotype = eval("genotypes.%s" % args.arch)
-  #model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
-  #model = model.cuda()
-  model =  utils.load_from_all(args.model_path)
+  genotype = eval("genotypes.%s" % args.arch)
+  model = Network(args.init_channels, CIFAR_CLASSES, args.layers, args.auxiliary, genotype)
+  model = model.cuda()
+  #model =  utils.load_from_all(args.model_path)
   
 
   logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
@@ -114,7 +114,7 @@ def main():
 
   model.drop_path_prob = args.drop_path_prob
   logits_all, test_acc, test_obj = infer(test_queue, model, criterion)
-  pickle.dump(logits_all, open( "logits.p", "wb" ))
+  pickle.dump(logits_all, open(args.save +"/logits.p", "wb" ))
   logging.info('test_acc %f', test_acc)
 
 
